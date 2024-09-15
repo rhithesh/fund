@@ -36,6 +36,7 @@ export async function GET(request: Request) {
     });
     // @ts-ignore
     result.data.links.actions = Updatedactions;
+    result.data.error = "messed";
     // @ts-ignore
     const payload: ActionGetResponse = result?.data;
     console.log(payload);
