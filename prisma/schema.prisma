@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://rhithesh:S8q6IazDZWUJ@ep-cold-snowflake-a16kdx7u.ap-southeast-1.aws.neon.tech/nosign?sslmode=require"
+  url      = "postgresql://rhithesh:S8q6IazDZWUJ@ep-cold-snowflake-a16kdx7u.ap-southeast-1.aws.neon.tech/nosign"
 }
 
 model Account {
