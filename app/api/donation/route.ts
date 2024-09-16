@@ -33,6 +33,8 @@ export async function GET(request: Request) {
         href: `${url.href}?amount=${parseFloat(e.value)}`,
       };
     });
+    // @ts-ignore
+
     result.data.links["actions"] = Updatedactions;
 
     const payload: ActionGetResponse = result?.data;
