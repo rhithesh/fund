@@ -22,29 +22,25 @@ export async function GET(request: Request) {
   const id = url.searchParams.get("id"); // '2'
 
   try {
-    let result = await prisma.blink.findUnique({
+    const result = await prisma.blink.findUnique({
       // @ts-ignore
       where: { key: id },
     });
-
-    // @ts-ignore
     const Updatedactions = result.data.links.actions.map((e) => {
       return {
         label: `Donate ${parseFloat(e.value)} SOL`,
         href: `${url.href}?amount=${parseFloat(e.value)}`,
       };
     });
-    // @ts-ignore
-    result.data.links.actions = Updatedactions;
-    // @ts-ignore
-    result.data.error = "messed";
-    // @ts-ignore
+    result.data.links["actions"] = Updatedactions;
+
     const payload: ActionGetResponse = result?.data;
     console.log(payload);
     return new Response(JSON.stringify(payload), {
       headers: ACTIONS_CORS_HEADERS,
     });
   } catch (error) {
+    console.log(error);
     return new Response(
       JSON.stringify({
         error: {
