@@ -1,3 +1,9 @@
-export default function DiscoverPage(){
-  return(<div>this is Discover page</div>)
+import DiscoverPage from "@/components/Discover/DiscoverPage";
+
+export default function Page() {
+  return (
+    <div className="dark:bg-neutral-950">
+      <DiscoverPage />
+    </div>
+  );
 }

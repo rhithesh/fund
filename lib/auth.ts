@@ -1,6 +1,7 @@
 import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { SessionStrategy } from "next-auth";
 import prisma from "./prismaDb";
 import type { Session } from "next-auth";
@@ -25,14 +26,41 @@ export const authOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
-      clientId:
-        "789137695369-8vu7be6f0gmd3t3vrj93htp9svvfvnb3.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    }),
+    CredentialsProvider({
+      name: "Sign in with credentials",
+
+      credentials: {
+        email: { label: "Name", type: "text", placeholder: "name" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        console.log(credentials);
+
+        try {
+          const user = await prisma.client.findUnique({
+            where: {
+              email: credentials.email as string,
+              password: credentials.password as string,
+            },
+          });
+          if (user) {
+            return user;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        return null;
+      },
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt" as SessionStrategy,
+    maxAge: 7 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
   },
   callbacks: {
     async jwt({ token }: { token: JWTToken }) {
@@ -58,5 +86,9 @@ export const authOptions = {
 
       return { ...session, user };
     },
+  },
+  pages: {
+    signIn: "/auth/login",
+    newUser: "/auth/signup",
   },
 };
