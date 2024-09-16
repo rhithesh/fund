@@ -1,107 +1,83 @@
 "use client";
-
-import React, { useCallback, useState } from "react";
+import React from "react";
 import WalletConnection from "../adapterUi/WalletConnection";
 import { ModeToggle } from "./toggle-mode";
-import { Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { NavbarItems } from "./Navbar/NavbarItems";
-import { BsChevronDown } from "react-icons/bs";
-import { MobileMenu } from "./Navbar/MobileMenu";
 import { signIn, signOut } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { LogOut, UserPlus } from "lucide-react";
 
 export function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
-  const [mobileMenu, setMobileMenu] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleMobileMenu = useCallback(() => {
-    setMobileMenu((current) => !current);
-  }, []);
+  const AvatarMenu = () => (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Avatar className="cursor-pointer">
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      </PopoverTrigger>
+      <PopoverContent className="w-56 rounded-xl dark:bg-neutral-800 mt-4">
+        <div className="grid gap-4">
+          <div className="flex flex-row items-center justify-center gap-8 mb-4 mt-2">
+            <WalletConnection />
+            <ModeToggle />
+          </div>
+          <button
+            className="flex items-center gap-2 justify-center flex-row text-sm font-medium bg-gradient-to-tr from-green-400 to-green-700 rounded-lg py-1 text-white hover:bg-gradient-to-b hover:from-green-500 hover:to-green-800 hover:text-gray-700"
+            onClick={() => signIn(undefined, { callbackUrl: "/dashboard" })}
+          >
+            <UserPlus className="h-4 w-4" />
+            Sign in
+          </button>
+          <button
+            className="flex items-center gap-2 justify-center flex-row text-sm font-medium bg-gradient-to-tr from-red-500 to-red-700 rounded-lg py-1 text-white hover:bg-gradient-to-b hover:from-red-500 hover:to-red-800 hover:text-gray-700"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
 
   return (
-    <div className="fixed top-5 left-0 right-0">
-      <div className="flex justify-center">
-        {/* mobile view */}
-        <div className="flex justify-between items-center bg-white dark:bg-neutral-900 dark:text-white text-black border text-xl rounded-lg w-full lg:w-1/2 p-4">
-          <div className="flex items-center gap-4">
-            <div
-              className="text-2xl font-bold cursor-pointer"
-              onClick={() => router.push("/")}
-            >
-              ChaosCrowd
+    <div className="fixed top-0 left-0 right-0 z-50 px-6 md:px-20 lg:px-32 xl:px-60 py-4">
+      <nav className=" bg-gray-100 dark:bg-neutral-800 backdrop-blur-sm rounded-xl shadow-lg ">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center">
+              <div
+                className="flex-shrink-0 font-bold text-transparent bg-clip-text bg-gradient-to-b from-gray-400 to-gray-700 lg:text-3xl dark:bg-gradient-to-b dark:from-white dark:to-gray-700 cursor-pointer"
+                onClick={() => router.push("/")}
+              >
+                ChaosCrowd
+              </div>
+              <div className="hidden md:block ml-6">
+                <NavbarItems label="ChaosCrowd" />
+              </div>
             </div>
 
             {/* Desktop view */}
-            <div className="hidden lg:flex gap-4 text-sm">
-              <NavbarItems label="Discover" />
-              <NavbarItems label="Create" />
+            <div className="hidden md:flex items-center space-x-4">
+              <AvatarMenu />
             </div>
 
-            <div
-              className="text-sm flex items-center gap-2 lg:hidden"
-              onClick={toggleMobileMenu}
-            >
-              <p className="test-sm">Browse</p>
-              <BsChevronDown
-                className={`text-black dark:text-white transition ${
-                  mobileMenu ? `rotate-180` : `rotate-0`
-                }`}
-              />
-            </div>
-
-            <MobileMenu visible={mobileMenu} />
-          </div>
-
-          {/* Desktop view */}
-          <div className="hidden lg:flex gap-2">
-            <WalletConnection />
-            <ModeToggle />
-            <button
-              className="bg-primary-500   dark:text-white text-black px-4 py-2 rounded-lg"
-              onClick={() => {
-                signIn(undefined, { callbackUrl: "/dashboard" });
-              }}
-            >
-              Sign in
-            </button>
-            <button
-              className="bg-primary-500   dark:text-white text-black px-4 py-2 rounded-lg"
-              onClick={() => {
-                signOut({ callbackUrl: "/" });
-              }}
-            >
-              Sign out
-            </button>
-          </div>
-
-          {/* Mobile view - Hamburger icon */}
-          <div className="lg:hidden">
-            <button onClick={toggleMenu} className="p-2">
-              <Menu size={24} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden absolute top-full left-5 right-5 mt-2 bg-white dark:bg-neutral-800 border rounded-lg p-5 ">
-          <div className="flex flex-col gap-4 text-black dark:text-white">
-            <div className="flex gap-2 justify-around  items-center">
-              <p>Connect Wallet</p>
-              <WalletConnection />
-            </div>
-            <div className="flex gap-2 justify-around items-center">
-              <p>Switch Modes</p> <ModeToggle />
+            {/* Mobile view */}
+            <div className="md:hidden">
+              <AvatarMenu />
             </div>
           </div>
         </div>
-      )}
+      </nav>
     </div>
   );
 }

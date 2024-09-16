@@ -3,7 +3,12 @@ import { WalletName } from "@solana/wallet-adapter-base";
 import React, { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Image from "next/image";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,11 +47,11 @@ const WalletConnection = () => {
         <div className="flex gap-2 items-center">
           {!publicKey ? (
             <DialogTrigger asChild>
-              <Button aria-label="Connect Wallet">
+              <Button aria-label="Connect Wallet" className="max-px-3 max-py-1">
                 {connecting ? (
                   <span className="loading loading-dots loading-xs"></span>
                 ) : (
-                  <LuWallet />
+                  <LuWallet className="w-4 h-4" />
                 )}
               </Button>
             </DialogTrigger>
@@ -54,9 +59,9 @@ const WalletConnection = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="dark:bg-black text-center text-white px-4 py-2 rounded-md text-base font-mono font-medium hover:bg-gray-600 transition-colors">
-                  <span className="text-sm">{`${publicKey.toBase58().slice(0, 4)}...${publicKey
+                  <span className="text-sm">{`${publicKey
                     .toBase58()
-                    .slice(-4)}`}</span>
+                    .slice(0, 4)}...${publicKey.toBase58().slice(-4)}`}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-black rounded-lg hover:bg-gray-600">
