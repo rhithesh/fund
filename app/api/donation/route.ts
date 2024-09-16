@@ -38,6 +38,7 @@ export async function GET(request: Request) {
     // @ts-ignore
     const payload: ActionGetResponse = result.data;
     console.log(payload);
+    // @ts-ignore
     return new Response(JSON.stringify(payload), {
       headers: ACTIONS_CORS_HEADERS,
     });
