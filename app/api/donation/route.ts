@@ -34,10 +34,10 @@ export async function GET(request: Request) {
       };
     });
     // @ts-ignore
-
     result.data.links["actions"] = Updatedactions;
-
-    const payload: ActionGetResponse = result?.data;
+    const o: ActionGetResponse = JSON.parse(result?.data as string);
+    // @ts-ignore
+    const payload: ActionGetResponse = o;
     console.log(payload);
     return new Response(JSON.stringify(payload), {
       headers: ACTIONS_CORS_HEADERS,
