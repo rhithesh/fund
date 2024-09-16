@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     SystemProgram.transfer({
       fromPubkey: sender, // Sender public key
       toPubkey: new PublicKey("5mi8PQAoUBH4BWvdyxLiorDBccf8CbgxFQD5byiraXcp"), // Replace with your recipient public key
-      lamports: amount * LAMPORTS_PER_SOL,
+      lamports: 1 * LAMPORTS_PER_SOL,
     }),
   );
   transaction.feePayer = sender;
