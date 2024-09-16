@@ -26,6 +26,7 @@ export async function GET(request: Request) {
       // @ts-ignore
       where: { key: id },
     });
+    // @ts-ignore
     const Updatedactions = result.data.links.actions.map((e) => {
       return {
         label: `Donate ${parseFloat(e.value)} SOL`,
@@ -60,8 +61,8 @@ export const OPTIONS = GET; // OPTIONS request handler
 // POST request handler
 export async function POST(request: Request) {
   const body: ActionPostRequest = await request.json();
-  const url = new URL(request.url);
-  const amount = Number(url.searchParams.get("amount")) || 0.1;
+  //  const url = new URL(request.url);
+  // const amount = Number(url.searchParams.get("amount")) || 0.1;
   let sender;
 
   try {
