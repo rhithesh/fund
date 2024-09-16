@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const payload: ActionGetResponse = result.data;
     console.log(payload);
     // @ts-ignore
-    return new Response(JSON.stringify(payload), {
+    return Response.json(payload, {
       headers: ACTIONS_CORS_HEADERS,
     });
   } catch (error) {
